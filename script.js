@@ -6,6 +6,7 @@ const INLINE_COMIC_DATA = {
       title: "Chapter 1",
       folder: "assets/comic/chapter-1",
       pages: [
+        "assets/comic/chapter-1/page-00.jpg",
         "assets/comic/chapter-1/page-01.jpg",
         "assets/comic/chapter-1/page-02.jpg",
         "assets/comic/chapter-1/page-03.jpg",
@@ -44,6 +45,7 @@ const INLINE_COMIC_DATA = {
       title: "Chapter 2",
       folder: "assets/comic/chapter-2",
       pages: [
+        "assets/comic/chapter-2/page-00.jpg",
         "assets/comic/chapter-2/page-01.jpg",
         "assets/comic/chapter-2/page-02.jpg",
         "assets/comic/chapter-2/page-03.jpg",
@@ -80,6 +82,7 @@ const INLINE_COMIC_DATA = {
       title: "Chapter 3",
       folder: "assets/comic/chapter-3",
       pages: [
+        "assets/comic/chapter-3/page-00.jpg",
         "assets/comic/chapter-3/page-01.jpg",
         "assets/comic/chapter-3/page-02.jpg",
         "assets/comic/chapter-3/page-03.jpg",
@@ -117,7 +120,38 @@ let comicData = { chapters: [] };
 let currentChapterIndex = 0;
 let currentPageIndex = 0;
 
-const SECTION_IDS = ["home", "archive", "about", "cast"];
+const SECTION_IDS = ["home", "archive", "about", "cast", "support"];
+const READER_POSITION_KEY = "dissonant-reader-position";
+
+function saveReaderPosition() {
+  try {
+    localStorage.setItem(
+      READER_POSITION_KEY,
+      JSON.stringify({
+        chapterIndex: currentChapterIndex,
+        pageIndex: currentPageIndex
+      })
+    );
+  } catch (e) {
+    /* ignore quota or private browsing */
+  }
+}
+
+function loadReaderPosition() {
+  try {
+    const raw = localStorage.getItem(READER_POSITION_KEY);
+    if (!raw) return null;
+    const { chapterIndex, pageIndex } = JSON.parse(raw);
+    if (typeof chapterIndex !== "number" || typeof pageIndex !== "number") return null;
+    if (!comicData.chapters || comicData.chapters.length === 0) return null;
+    if (chapterIndex < 0 || chapterIndex >= comicData.chapters.length) return null;
+    const ch = comicData.chapters[chapterIndex];
+    if (!ch || !ch.pages || pageIndex < 0 || pageIndex >= ch.pages.length) return null;
+    return { chapterIndex, pageIndex };
+  } catch (e) {
+    return null;
+  }
+}
 
 function $(selector) {
   return document.querySelector(selector);
@@ -168,7 +202,13 @@ function initNavigation() {
       const target = btn.dataset.section;
       if (!target) return;
       setActiveSection(target);
-      window.location.hash = `#${target}`;
+      // Only scroll "down a bit" via the #home anchor when going to the reader.
+      // For other tabs, scroll to the very top of the page.
+      if (target === "home") {
+        window.location.hash = "#home";
+      } else {
+        window.location.hash = "#";
+      }
     });
   });
 
@@ -229,6 +269,7 @@ function updateReaderUI() {
   const prevBtn = $("#prev-page");
   const nextBtn = $("#next-page");
   const lastBtn = $("#last-page");
+  const pageJumpSelect = $("#page-jump");
 
   if (!chapter || !chapter.pages || chapter.pages.length === 0) {
     if (imageEl) {
@@ -252,12 +293,30 @@ function updateReaderUI() {
   }
 
   const onFirstPage = currentPageIndex === 0;
-  const onLastPage = currentPageIndex >= totalPages - 1;
+  const onLastPageOfChapter = currentPageIndex >= totalPages - 1;
+  const noChapters = !comicData.chapters || comicData.chapters.length === 0;
+  const isFirstChapter = noChapters ? true : currentChapterIndex === 0;
+  const isLastChapter = noChapters
+    ? true
+    : currentChapterIndex >= comicData.chapters.length - 1;
+  const onFirstPageOfFirstChapter = isFirstChapter && onFirstPage;
+  const onLastPageOfLastChapter = isLastChapter && onLastPageOfChapter;
 
-  if (firstBtn) firstBtn.disabled = onFirstPage;
-  if (prevBtn) prevBtn.disabled = onFirstPage;
-  if (nextBtn) nextBtn.disabled = onLastPage;
-  if (lastBtn) lastBtn.disabled = onLastPage;
+  // Disable first/prev only on very first page of the very first chapter
+  if (firstBtn) firstBtn.disabled = onFirstPageOfFirstChapter;
+  if (prevBtn) prevBtn.disabled = onFirstPageOfFirstChapter;
+
+  // Only disable next/last when we are truly at the end of the final chapter
+  if (nextBtn) nextBtn.disabled = onLastPageOfLastChapter;
+  if (lastBtn) lastBtn.disabled = onLastPageOfLastChapter;
+
+  // Keep the page-jump dropdown in sync with the current page
+  if (pageJumpSelect && !noChapters) {
+    const value = `${currentChapterIndex}:${currentPageIndex}`;
+    if (pageJumpSelect.value !== value) {
+      pageJumpSelect.value = value;
+    }
+  }
 }
 
 function setChapter(index) {
@@ -279,6 +338,13 @@ function setChapter(index) {
 
   showMessage("");
   updateReaderUI();
+  saveReaderPosition();
+
+  // Ensure the reader is visible whenever we change chapters
+  const homeSection = document.getElementById("home");
+  if (homeSection) {
+    homeSection.scrollIntoView({ behavior: "auto", block: "start" });
+  }
 }
 
 function setPage(pageIndex) {
@@ -289,28 +355,68 @@ function setPage(pageIndex) {
   if (safeIndex === currentPageIndex) return;
   currentPageIndex = safeIndex;
   updateReaderUI();
+  saveReaderPosition();
+
+  // Keep the reader in view when changing pages
+  const homeSection = document.getElementById("home");
+  if (homeSection) {
+    homeSection.scrollIntoView({ behavior: "auto", block: "start" });
+  }
 }
 
 function goToNextPage() {
   const chapter = getCurrentChapter();
   if (!chapter || !chapter.pages || chapter.pages.length === 0) return;
-  if (currentPageIndex >= chapter.pages.length - 1) return;
-  setPage(currentPageIndex + 1);
+  const lastPageIndex = chapter.pages.length - 1;
+
+  // If we are not yet at the last page of this chapter, go to next page
+  if (currentPageIndex < lastPageIndex) {
+    setPage(currentPageIndex + 1);
+    return;
+  }
+
+  // We are at the last page of this chapter – try to go to the first page of the next chapter
+  if (comicData.chapters && currentChapterIndex < comicData.chapters.length - 1) {
+    setChapter(currentChapterIndex + 1); // setChapter always goes to page index 0 (page-00)
+  }
 }
 
 function goToPrevPage() {
-  if (currentPageIndex <= 0) return;
-  setPage(currentPageIndex - 1);
+  const chapter = getCurrentChapter();
+  if (!chapter || !chapter.pages || chapter.pages.length === 0) return;
+
+  // If we're not on the first page of this chapter, just go back one page
+  if (currentPageIndex > 0) {
+    setPage(currentPageIndex - 1);
+    return;
+  }
+
+  // We are on the first page of this chapter – try to go to the last page of the previous chapter
+  if (comicData.chapters && currentChapterIndex > 0) {
+    const prevChapterIndex = currentChapterIndex - 1;
+    const prevChapter = comicData.chapters[prevChapterIndex];
+    if (prevChapter && prevChapter.pages && prevChapter.pages.length > 0) {
+      // Jump to previous chapter, last page
+      setChapter(prevChapterIndex);
+      setPage(prevChapter.pages.length - 1);
+    }
+  }
 }
 
 function goToFirstPage() {
-  setPage(0);
+  if (!comicData.chapters || comicData.chapters.length === 0) return;
+  // Jump to very first chapter, very first page
+  setChapter(0);
 }
 
 function goToLastPage() {
-  const chapter = getCurrentChapter();
-  if (!chapter || !chapter.pages || chapter.pages.length === 0) return;
-  setPage(chapter.pages.length - 1);
+  if (!comicData.chapters || comicData.chapters.length === 0) return;
+  // Jump to very last chapter, very last page that exists
+  const lastChapterIndex = comicData.chapters.length - 1;
+  const lastChapter = comicData.chapters[lastChapterIndex];
+  if (!lastChapter || !lastChapter.pages || lastChapter.pages.length === 0) return;
+  setChapter(lastChapterIndex);
+  setPage(lastChapter.pages.length - 1);
 }
 
 function initReaderInteractions() {
@@ -321,6 +427,7 @@ function initReaderInteractions() {
   const leftZone = $("#reader-click-left");
   const rightZone = $("#reader-click-right");
   const chapterSelect = $("#chapter-select");
+  const pageJumpSelect = $("#page-jump");
 
   if (firstBtn) firstBtn.addEventListener("click", goToFirstPage);
   if (prevBtn) prevBtn.addEventListener("click", goToPrevPage);
@@ -336,6 +443,20 @@ function initReaderInteractions() {
       if (index >= 0) {
         setChapter(index);
       }
+    });
+  }
+
+  if (pageJumpSelect) {
+    pageJumpSelect.addEventListener("change", (event) => {
+      const value = event.target.value;
+      if (!value) return;
+      const parts = value.split(":");
+      if (parts.length !== 2) return;
+      const chapterIndex = parseInt(parts[0], 10);
+      const pageIndex = parseInt(parts[1], 10);
+      if (Number.isNaN(chapterIndex) || Number.isNaN(pageIndex)) return;
+      setChapter(chapterIndex);
+      setPage(pageIndex);
     });
   }
 
@@ -372,10 +493,41 @@ function populateChapterSelect() {
     const option = document.createElement("option");
     option.value = chapter.id;
     const title = chapter.title || chapter.id || `Chapter ${index + 1}`;
-    const pagesCount = chapter.pages ? chapter.pages.length : 0;
-    option.textContent =
-      pagesCount > 0 ? `${title} (${pagesCount} pages)` : title;
+    option.textContent = title;
     select.appendChild(option);
+  });
+}
+
+function populatePageJumpSelect() {
+  const select = $("#page-jump");
+  if (!select) return;
+
+  select.innerHTML = "";
+
+  if (!comicData.chapters || comicData.chapters.length === 0) {
+    const emptyOption = document.createElement("option");
+    emptyOption.textContent = "No pages yet";
+    emptyOption.value = "";
+    emptyOption.disabled = true;
+    emptyOption.selected = true;
+    select.appendChild(emptyOption);
+    select.disabled = true;
+    return;
+  }
+
+  select.disabled = false;
+
+  comicData.chapters.forEach((chapter, chapterIndex) => {
+    const chapterTitle = chapter.title || chapter.id || `Chapter ${chapterIndex + 1}`;
+    if (!chapter.pages || chapter.pages.length === 0) return;
+
+    chapter.pages.forEach((_, pageIndex) => {
+      const option = document.createElement("option");
+      option.value = `${chapterIndex}:${pageIndex}`;
+      const pageNumber = pageIndex + 1;
+      option.textContent = `${chapterTitle}, page ${pageNumber}`;
+      select.appendChild(option);
+    });
   });
 }
 
@@ -398,31 +550,27 @@ function initArchive() {
     const card = document.createElement("article");
     card.className = "archive-card";
 
+    const firstPageUrl =
+      chapter.pages && chapter.pages.length > 0 ? chapter.pages[0] : null;
+
+    if (firstPageUrl) {
+      const thumb = document.createElement("img");
+      thumb.className = "archive-card__thumb";
+      thumb.src = firstPageUrl;
+      thumb.alt = (chapter.title || chapter.id || `Chapter ${index + 1}`) + " cover";
+      thumb.addEventListener("click", () => {
+        setChapter(index);
+        setActiveSection("home");
+        window.location.hash = "#home";
+      });
+      card.appendChild(thumb);
+    }
+
     const title = document.createElement("h3");
     title.className = "archive-card__title";
     title.textContent = chapter.title || chapter.id || `Chapter ${index + 1}`;
 
-    const meta = document.createElement("p");
-    meta.className = "archive-card__meta";
-    const pagesCount = chapter.pages ? chapter.pages.length : 0;
-    meta.textContent =
-      pagesCount > 0
-        ? `${pagesCount} page${pagesCount === 1 ? "" : "s"}`
-        : "No pages yet";
-
-    const button = document.createElement("button");
-    button.type = "button";
-    button.className = "archive-card__button";
-    button.textContent = "Read";
-    button.addEventListener("click", () => {
-      setChapter(index);
-      setActiveSection("home");
-      window.location.hash = "#home";
-    });
-
     card.appendChild(title);
-    card.appendChild(meta);
-    card.appendChild(button);
 
     container.appendChild(card);
   });
@@ -434,11 +582,18 @@ async function initApp() {
   await loadComicData();
 
   populateChapterSelect();
+  populatePageJumpSelect();
   initArchive();
   initReaderInteractions();
 
   if (comicData.chapters && comicData.chapters.length > 0) {
-    setChapter(0);
+    const saved = loadReaderPosition();
+    if (saved) {
+      setChapter(saved.chapterIndex);
+      setPage(saved.pageIndex);
+    } else {
+      setChapter(0);
+    }
   } else {
     showMessage(
       "Welcome to The Dissonant. Once your chapter images are added and the data file is generated, you will be able to read the comic here."

@@ -27,9 +27,9 @@
         </div>
         <nav class="site-nav" aria-label="Main">
           <button class="nav-link nav-link--active" type="button" data-section="home">Home</button>
-          <button class="nav-link" type="button" data-section="archive">Archyve</button>
           <button class="nav-link" type="button" data-section="about">About</button>
-          <button class="nav-link" type="button" data-section="cast">Cast</button>
+          <button class="nav-link" type="button" data-section="archive">Archive</button>
+          <button class="nav-link" type="button" data-section="support">Support</button>
         </nav>
       </div>
     </header>
@@ -38,17 +38,6 @@
       <!-- HOME / READER -->
       <section id="home" class="section section--active" aria-label="Comic reader">
         <div class="reader">
-          <div class="reader__header">
-            <div class="reader__controls">
-              <label class="reader__chapter-select">
-                <span>Chapter:</span>
-                <select id="chapter-select" name="chapter-select" aria-label="Select chapter">
-                  <!-- Populated by script.js -->
-                </select>
-              </label>
-            </div>
-          </div>
-
           <div class="reader__main">
             <div class="reader-image-wrapper">
               <div
@@ -74,16 +63,23 @@
 
           <div class="reader__pager">
             <button id="first-page" class="reader-button" type="button" aria-label="First page">
-              « First
+              <img src="assets/ui/buttons/button-first.png" alt="" class="reader-button__icon" />
             </button>
             <button id="prev-page" class="reader-button" type="button" aria-label="Previous page">
-              ‹ Prev
+              <img src="assets/ui/buttons/button-previous.png" alt="" class="reader-button__icon" />
             </button>
+
+            <label class="page-jump-select">
+              <select id="page-jump" name="page-jump" aria-label="Jump to page in The Dissonant">
+                <!-- Populated by script.js -->
+              </select>
+            </label>
+
             <button id="next-page" class="reader-button" type="button" aria-label="Next page">
-              Next ›
+              <img src="assets/ui/buttons/button-next.png" alt="" class="reader-button__icon" />
             </button>
             <button id="last-page" class="reader-button" type="button" aria-label="Last page">
-              Last »
+              <img src="assets/ui/buttons/button-last.png" alt="" class="reader-button__icon" />
             </button>
           </div>
 
@@ -94,10 +90,6 @@
       <!-- ARCHYVE -->
       <section id="archive" class="section" aria-label="Archyve">
         <div class="section__inner">
-          <h2 class="section__title">Archyve</h2>
-          <p class="section__intro">
-            Choose a chapter to jump directly into the story.
-          </p>
           <div id="archive-list" class="archive-list">
             <!-- Populated by script.js -->
           </div>
@@ -107,41 +99,68 @@
       <!-- ABOUT -->
       <section id="about" class="section" aria-label="About the creators">
         <div class="section__inner section__inner--text">
-          <h2 class="section__title">About</h2>
+          <article class="about-block">
+            <h3 class="about-block__title">Daniel Sayeg</h3>
+            <div class="about-block__layout">
+              <div class="about-block__media">
+                <img
+                  src="assets/images/daniel-pic.png"
+                  alt="Portrait of Daniel Sayeg"
+                  class="about-block__image"
+                />
+              </div>
+              <div class="about-block__body">
+                <p class="about-block__text">
+                  Daniel Sayeg is a game designer by day and a graphic novelist by night. He’s into cartoons,
+                  punk music, and lately making tortellini from scratch.
+                </p>
+                <p class="about-block__text">
+                  He’s carried the world of The Dissonant in his head for years, weaving its ideas into short stories
+                  and D&amp;D campaigns. The story and its characters draw from his political beliefs, personal struggles,
+                  and the people in his life.
+                </p>
+                <p class="about-block__text">
+                  <a href="https://bsky.app/profile/danielsayeg.bsky.social" target="_blank" rel="noreferrer">
+                    Daniel @ Bluesky
+                  </a>
+                </p>
+              </div>
+            </div>
+          </article>
 
           <article class="about-block">
             <h3 class="about-block__title">Mauricio Gonzalez</h3>
-            <p class="about-block__text">
-              Mauricio Gonzalez is a freelance artist with a passion for storytelling and world building.
-              He runs on caffeine, and if he’s not holding a pencil, he is playing with his dogs or covered in clay.
-            </p>
-            <p class="about-block__text">
-              He has been visually and narratively developing worlds ever since he could hold a pencil —
-              The Dissonant is neither his first nor last.
-            </p>
+            <div class="about-block__layout">
+              <div class="about-block__media">
+                <img
+                  src="assets/images/mao-pic.png"
+                  alt="Portrait of Mauricio Gonzalez"
+                  class="about-block__image"
+                />
+              </div>
+              <div class="about-block__body">
+                <p class="about-block__text">
+                  Mauricio Gonzalez is a freelance artist with a passion for storytelling and world building.
+                  He runs on caffeine, and if he’s not holding a pencil, he is playing with his dogs or covered in clay.
+                </p>
+                <p class="about-block__text">
+                  He has been visually and narratively developing worlds ever since he could hold a pencil —
+                  The Dissonant is neither his first nor last.
+                </p>
+                <p class="about-block__text">
+                  <a href="https://bsky.app/profile/did:plc:zlpfd63tqjkuhstmohlf3kwj" target="_blank" rel="noreferrer">
+                    Mao @ Bluesky
+                  </a>
+                </p>
+              </div>
+            </div>
           </article>
 
           <article class="about-block">
-            <h3 class="about-block__title">Daniel Sayeg</h3>
             <p class="about-block__text">
-              Daniel Sayeg is a game designer by morning and a graphic novelist by dawn.
-              He’s into cartoons, punk music, and lately making tortellini from scratch.
-            </p>
-            <p class="about-block__text">
-              He had the concepts from the world of The Dissonant in his head for years, and wrote them into
-              his short stories and his D&amp;D campaigns. The story and the characters are inspired by his
-              political beliefs and struggles, and the people in his life.
-            </p>
-          </article>
-
-          <article class="about-block">
-            <h3 class="about-block__title">Together</h3>
-            <p class="about-block__text">
-              We met as foreign art students at École Émile Cohl in Lyon, France. Though neither of us finished
-              our art degree, we stayed in touch, collaborating on comics and game jams.
-            </p>
-            <p class="about-block__text">
-              The Dissonant is our most ambitious project yet.
+              We met as foreign art students at École Émile Cohl in Lyon, France. Though neither of us finished our art
+              degree, we stayed in touch, collaborating on comics and game jams. The Dissonant is our most ambitious
+              project yet.
             </p>
             <p class="about-block__text">
               For inquiries, email us at:
@@ -154,34 +173,18 @@
       <!-- CAST -->
       <section id="cast" class="section" aria-label="Cast">
         <div class="section__inner section__inner--text">
-          <h2 class="section__title">Cast</h2>
+          <p class="cast-card__text">
+            Coming soon.
+          </p>
+        </div>
+      </section>
 
-          <article class="cast-card">
-            <h3 class="cast-card__name">Aashvi Unba</h3>
-            <p class="cast-card__text">
-              Aashvi is the brains of the dynamic duo between her and her brother. She is an introverted girl who
-              prefers books over swords, which often made her an outsider to her Bone-Born friends. Knowing how her
-              surroundings react to her intellectual tendencies, Aashvi found peace in her family’s side.
-            </p>
-          </article>
-
-          <article class="cast-card">
-            <h3 class="cast-card__name">Duru Unba</h3>
-            <p class="cast-card__text">
-              When Aashvi stops to think, Duru takes careless action. He is the younger, restless sibling of the two
-              who dreams of bringing honour to his family and becoming an elite soldier, a true Bone-Born. But for
-              now, he is too young to be marked – and before the days of chivalry arrive, he enjoys the days of mischief.
-            </p>
-          </article>
-
-          <article class="cast-card">
-            <h3 class="cast-card__name">Panash Unba</h3>
-            <p class="cast-card__text">
-              Often being mocked for working as an electrician instead of a proper Bone-Born job, Panash’s inner peace
-              is hard to shake; and the root of that peace is his responsibility of fatherhood. Being both the caretaker
-              and provider for his two children is not an easy task, and yet it is one that he does proudly.
-            </p>
-          </article>
+      <!-- SUPPORT -->
+      <section id="support" class="section" aria-label="Support">
+        <div class="section__inner section__inner--text">
+          <p class="cast-card__text">
+            Coming soon.
+          </p>
         </div>
       </section>
     </main>
