@@ -463,6 +463,16 @@ a:hover {
   transform: translateY(-1px);
 }
 
+.about-story__image {
+  display: block;
+  max-width: 365px;
+  width: 100%;
+  height: auto;
+  margin: 0.6rem auto 1.2rem;
+  border-radius: 12px;
+  box-shadow: 0 14px 30px rgba(0, 0, 0, 0.65);
+}
+
 .about-story__quote {
   margin: 0.5rem auto 1rem;
   padding: 0 1rem 0 1.25rem;
@@ -470,7 +480,7 @@ a:hover {
   border-left: 4px solid rgba(255, 255, 255, 0.25);
   font-style: italic;
   color: var(--color-text-muted);
-  text-align: center;
+  text-align: left;
 }
 
 .about-story__quote cite {
@@ -632,15 +642,16 @@ a:hover {
   }
 
   .site-nav {
-    flex-wrap: nowrap;
-    justify-content: flex-start;
+    flex-wrap: wrap;
+    justify-content: center;
     max-width: 100%;
-    overflow-x: auto;
+    padding: 0.25rem 0.6rem;
+    gap: 0.25rem;
   }
 
   .nav-link {
-    padding: 0.35rem 0.6rem;
-    font-size: 0.85rem;
+    padding: 0.3rem 0.5rem;
+    font-size: 0.8rem;
     white-space: nowrap;
   }
 
