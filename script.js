@@ -188,7 +188,7 @@ async function loadComicData() {
   }
 
   try {
-    const response = await fetch("comic-data.json", { cache: "no-cache" });
+    const response = await fetch("comic-data.json?v=2", { cache: "no-store" });
     if (!response.ok) {
       throw new Error(`HTTP ${response.status}`);
     }
