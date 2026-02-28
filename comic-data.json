@@ -111,6 +111,17 @@
         "assets/comic/chapter-3/page-27.jpg",
         "assets/comic/chapter-3/page-28.jpg"
       ]
+    },
+    {
+      "id": "chapter-4",
+      "title": "Chapter 4",
+      "folder": "assets/comic/chapter-4",
+      "pages": [
+        "assets/comic/chapter-4/page-01.jpg",
+        "assets/comic/chapter-4/page-02.jpg",
+        "assets/comic/chapter-4/page-03.jpg",
+        "assets/comic/chapter-4/page-04.jpg"
+      ]
     }
   ]
 }

@@ -112,6 +112,17 @@ const INLINE_COMIC_DATA = {
         "assets/comic/chapter-3/page-27.jpg",
         "assets/comic/chapter-3/page-28.jpg"
       ]
+    },
+    {
+      id: "chapter-4",
+      title: "Chapter 4",
+      folder: "assets/comic/chapter-4",
+      pages: [
+        "assets/comic/chapter-4/page-01.jpg",
+        "assets/comic/chapter-4/page-02.jpg",
+        "assets/comic/chapter-4/page-03.jpg",
+        "assets/comic/chapter-4/page-04.jpg"
+      ]
     }
   ]
 };
@@ -546,7 +557,10 @@ function initArchive() {
     return;
   }
 
-  comicData.chapters.forEach((chapter, index) => {
+  const chaptersForArchive = comicData.chapters.filter((ch) => ch.id !== "chapter-4");
+
+  chaptersForArchive.forEach((chapter, index) => {
+    const dataIndex = comicData.chapters.indexOf(chapter);
     const card = document.createElement("article");
     card.className = "archive-card";
 
@@ -557,9 +571,9 @@ function initArchive() {
       const thumb = document.createElement("img");
       thumb.className = "archive-card__thumb";
       thumb.src = firstPageUrl;
-      thumb.alt = (chapter.title || chapter.id || `Chapter ${index + 1}`) + " cover";
+      thumb.alt = (chapter.title || chapter.id || `Chapter ${dataIndex + 1}`) + " cover";
       thumb.addEventListener("click", () => {
-        setChapter(index);
+        setChapter(dataIndex);
         setActiveSection("home");
         window.location.hash = "#home";
       });
@@ -568,7 +582,7 @@ function initArchive() {
 
     const title = document.createElement("h3");
     title.className = "archive-card__title";
-    title.textContent = chapter.title || chapter.id || `Chapter ${index + 1}`;
+    title.textContent = chapter.title || chapter.id || `Chapter ${dataIndex + 1}`;
 
     card.appendChild(title);
 
