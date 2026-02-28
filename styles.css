@@ -463,6 +463,24 @@ a:hover {
   transform: translateY(-1px);
 }
 
+.about-story__quote {
+  margin: 0.5rem auto 1rem;
+  padding: 0 1rem 0 1.25rem;
+  max-width: 36em;
+  border-left: 4px solid rgba(255, 255, 255, 0.25);
+  font-style: italic;
+  color: var(--color-text-muted);
+  text-align: center;
+}
+
+.about-story__quote cite {
+  display: block;
+  margin-top: 0.4rem;
+  font-style: normal;
+  font-size: 0.9em;
+  opacity: 0.9;
+}
+
 .about-block + .about-block {
   margin-top: 1.2rem;
 }
@@ -515,6 +533,42 @@ a:hover {
   color: var(--color-text-muted);
 }
 
+.support-heading {
+  margin: 0 0 0.6rem;
+  font-family: "Tavernlore", "Milk Mustache", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  font-size: 1.2rem;
+  letter-spacing: 0.08em;
+  text-transform: none;
+}
+
+#about .support-heading {
+  text-align: center;
+}
+
+#about .support-heading:nth-of-type(2) {
+  margin-top: 2.5rem;
+}
+
+.support-subheading {
+  margin: 1.1rem 0 0.4rem;
+  font-family: "Tavernlore", "Milk Mustache", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  font-size: 1.2rem;
+  letter-spacing: 0.08em;
+  text-transform: none;
+}
+
+.support-patreon-logo {
+  display: block;
+  margin-top: 0.9rem;
+  text-align: center;
+}
+
+.support-patreon-logo img {
+  height: 44px;
+  width: auto;
+  display: inline-block;
+}
+
 @media (max-width: 768px) {
   .site-header__inner {
     flex-direction: column;
@@ -524,6 +578,27 @@ a:hover {
 
   .site-nav {
     justify-content: space-between;
+  }
+
+  .logo__image {
+    height: auto;
+    max-height: 150px;
+    width: auto;
+    max-width: 80%;
+    margin-inline: auto;
+  }
+
+  .reader-image-wrapper {
+    max-width: 100%;
+  }
+
+  .about-block__layout {
+    flex-direction: column-reverse;
+    align-items: center;
+  }
+
+  .about-block__body {
+    width: 100%;
   }
 
   .reader__main {
@@ -546,9 +621,32 @@ a:hover {
     padding-inline: 1rem;
   }
 
+  .reader {
+    padding-inline: 0;
+  }
+
+  .reader-image-wrapper {
+    max-width: 100%;
+    margin: 0;
+    border-radius: 0;
+  }
+
   .site-nav {
-    flex-wrap: wrap;
-    justify-content: center;
+    flex-wrap: nowrap;
+    justify-content: flex-start;
+    max-width: 100%;
+    overflow-x: auto;
+  }
+
+  .nav-link {
+    padding: 0.35rem 0.6rem;
+    font-size: 0.85rem;
+    white-space: nowrap;
+  }
+
+  .archive-list {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.7rem;
   }
 }
 
