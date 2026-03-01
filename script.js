@@ -330,6 +330,17 @@ function updateReaderUI() {
   }
 }
 
+function sendPageTurnEvent() {
+  const chapter = getCurrentChapter();
+  if (!chapter || typeof gtag !== "function") return;
+  gtag("event", "page_turn", {
+    chapter_index: currentChapterIndex,
+    chapter_title: chapter.title || chapter.id,
+    page_index: currentPageIndex,
+    page_number: currentPageIndex + 1
+  });
+}
+
 function setChapter(index) {
   if (!comicData.chapters || comicData.chapters.length === 0) {
     showMessage(
@@ -350,6 +361,7 @@ function setChapter(index) {
   showMessage("");
   updateReaderUI();
   saveReaderPosition();
+  sendPageTurnEvent();
 
   // Ensure the reader is visible whenever we change chapters
   const homeSection = document.getElementById("home");
@@ -367,6 +379,7 @@ function setPage(pageIndex) {
   currentPageIndex = safeIndex;
   updateReaderUI();
   saveReaderPosition();
+  sendPageTurnEvent();
 
   // Keep the reader in view when changing pages
   const homeSection = document.getElementById("home");
