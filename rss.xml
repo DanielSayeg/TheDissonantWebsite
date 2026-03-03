@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0">
+  <channel>
+    <title>The Dissonant</title>
+    <link>https://readthedissonant.com/</link>
+    <description>Updates from The Dissonant webcomic.</description>
+    <language>en</language>
+    <ttl>60</ttl>
+
+    <!-- Example items. You can duplicate and edit these manually when you add new pages. -->
+
+    <item>
+      <title>Chapter 4 – Page 4</title>
+      <link>https://readthedissonant.com/?chapter=4&amp;page=4</link>
+      <guid isPermaLink="false">chapter-4-page-4</guid>
+      <description>The latest page from Chapter 4 of The Dissonant.</description>
+    </item>
+
+    <item>
+      <title>Chapter 4 – Page 3</title>
+      <link>https://readthedissonant.com/?chapter=4&amp;page=3</link>
+      <guid isPermaLink="false">chapter-4-page-3</guid>
+      <description>A recent page from Chapter 4 of The Dissonant.</description>
+    </item>
+
+  </channel>
+</rss>
+

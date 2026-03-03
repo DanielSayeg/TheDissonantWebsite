@@ -223,6 +223,17 @@ function initNavigation() {
     });
   });
 
+   const rssButton = document.getElementById("rss-button");
+   if (rssButton) {
+     rssButton.addEventListener("click", (event) => {
+       event.preventDefault();
+       if (typeof gtag === "function") {
+         gtag("event", "rss-subsriber"); // track RSS clicks in GA4
+       }
+       window.location.href = "/rss.xml";
+     });
+   }
+
   // Clicking the logo always returns to Home
   const logo = document.querySelector(".logo");
   if (logo) {
