@@ -122,7 +122,8 @@ const INLINE_COMIC_DATA = {
         "assets/comic/chapter-4/page-02.jpg",
         "assets/comic/chapter-4/page-03.jpg",
         "assets/comic/chapter-4/page-04.jpg",
-        "assets/comic/chapter-4/page-05.jpg"
+        "assets/comic/chapter-4/page-05.jpg",
+        "assets/comic/chapter-4/page-06.jpg"
       ]
     }
   ]
