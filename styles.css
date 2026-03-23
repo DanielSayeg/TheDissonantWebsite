@@ -271,6 +271,37 @@ a:hover {
   margin: 0 auto;
 }
 
+.reader-discord {
+  margin-top: 0.75rem;
+  text-align: center;
+}
+
+.reader-discord__link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  transition: opacity var(--transition-fast);
+}
+
+.reader-discord__link:hover {
+  opacity: 0.88;
+}
+
+.reader-discord__link:focus-visible {
+  outline: 2px solid rgba(255, 255, 255, 0.45);
+  outline-offset: 4px;
+  border-radius: var(--radius-md);
+}
+
+.reader-discord__icon {
+  display: block;
+  width: min(92vw, 450px);
+  height: auto;
+  max-width: 100%;
+  object-fit: contain;
+}
+
 .reader-image {
   width: 100%;
   height: auto;
